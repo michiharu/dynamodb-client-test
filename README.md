@@ -8,7 +8,12 @@
 
 以下の２つのケースについて検証します。
 
-- DynamoDB 用クライアントを初期化処理で準備する（AWS 公式ドキュメントがお勧めするベストプラクティス）
-- DynamoDB 用クライアントを`put_item()`の直前で用意する
+- good pattern: DynamoDB 用クライアントを初期化処理で準備する
+- bad pattern: DynamoDB 用クライアントを`put_item()`の直前で用意する
+
+good pattarn は AWS 公式ドキュメントによるベストプラクティスです。
 
 ## 検証結果
+
+- good pattarn: "avg_time: 0.06340438890457153[sec]"
+- bad pattern: "avg_time: 0.2664264960289002[sec]"
