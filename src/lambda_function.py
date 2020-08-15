@@ -44,7 +44,7 @@ def put_items_good_pattern():
         item = Item(str(uuid4()), i)
         table = resource.Table(TEST_TABLE)
         table.put_item(Item=item.to_dict())
-    return time.time() - start
+    return (time.time() - start) / times
 
 
 def put_items_bad_pattern():
@@ -54,17 +54,17 @@ def put_items_bad_pattern():
         resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
         table = resource.Table(TEST_TABLE)
         table.put_item(Item=item.to_dict())
-    return time.time() - start
+    return (time.time() - start) / times
 
 
 def lambda_handler(event, context):
     if event["case"] == "good":
-        elapsed_time = put_items_good_pattern()
-        return f"elapsed_time: {elapsed_time}[sec]"
+        avg_time = put_items_good_pattern()
+        return f"avg_time: {avg_time}[sec]"
 
     if event["case"] == "bad":
-        elapsed_time = put_items_bad_pattern()
-        return f"elapsed_time: {elapsed_time}[sec]"
+        avg_time = put_items_bad_pattern()
+        return f"avg_time: {avg_time}[sec]"
 
     if event["case"] == "delete":
         delete_items()
