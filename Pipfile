@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+mypy = "*"
+flake8 = "*"
+black = "*"
+isort = "*"
+
+[packages]
+boto3 = "*"
+boto3-stubs = {extras = ["dynamodb"], version = "*"}
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
+
+[scripts]
+test = "python -m unittest discover src -v"
+isort = "python -m isort -m 3 ."
+lmd_build = "python -m lambda_builder"
+start = "python -m src.lambda_function"
