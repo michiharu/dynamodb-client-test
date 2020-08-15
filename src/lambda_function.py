@@ -9,6 +9,7 @@ import mypy_boto3_dynamodb as dynamodb
 resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
 
 TEST_TABLE = "test-items"
+times = 1000
 
 
 @dataclass
@@ -39,7 +40,7 @@ def delete_items():
 
 def put_items_good_pattern():
     start = time.time()
-    for i in range(100):
+    for i in range(times):
         item = Item(str(uuid4()), i)
         table = resource.Table(TEST_TABLE)
         table.put_item(Item=item.to_dict())
@@ -48,7 +49,7 @@ def put_items_good_pattern():
 
 def put_items_bad_pattern():
     start = time.time()
-    for i in range(100):
+    for i in range(times):
         item = Item(str(uuid4()), i)
         resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
         table = resource.Table(TEST_TABLE)
