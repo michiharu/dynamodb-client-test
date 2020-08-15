@@ -6,10 +6,10 @@ from uuid import uuid4
 import boto3
 import mypy_boto3_dynamodb as dynamodb
 
-resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
-
 TEST_TABLE = "test-items"
-times = 1000
+times = 100
+resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
+table = resource.Table(TEST_TABLE)
 
 
 @dataclass
@@ -38,16 +38,30 @@ def delete_items():
             batch.delete_item(Key={"id": record["id"]})
 
 
-def put_items_good_pattern():
+def show_cost1():
+    start = time.time()
+    for i in range(times):
+        boto3.resource("dynamodb")
+    return (time.time() - start) / times
+
+
+def show_cost2():
+    start = time.time()
+    for i in range(times):
+        resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
+        resource.Table(TEST_TABLE)
+    return (time.time() - start) / times
+
+
+def good_pattern():
     start = time.time()
     for i in range(times):
         item = Item(str(uuid4()), i)
-        table = resource.Table(TEST_TABLE)
         table.put_item(Item=item.to_dict())
     return (time.time() - start) / times
 
 
-def put_items_bad_pattern():
+def bad_pattern():
     start = time.time()
     for i in range(times):
         item = Item(str(uuid4()), i)
@@ -58,12 +72,20 @@ def put_items_bad_pattern():
 
 
 def lambda_handler(event, context):
+    if event["case"] == "show1":
+        avg_time = show_cost1()
+        return f"avg_time: {avg_time}[sec]"
+
+    if event["case"] == "show2":
+        avg_time = show_cost2()
+        return f"avg_time: {avg_time}[sec]"
+
     if event["case"] == "good":
-        avg_time = put_items_good_pattern()
+        avg_time = good_pattern()
         return f"avg_time: {avg_time}[sec]"
 
     if event["case"] == "bad":
-        avg_time = put_items_bad_pattern()
+        avg_time = bad_pattern()
         return f"avg_time: {avg_time}[sec]"
 
     if event["case"] == "delete":
@@ -71,4 +93,4 @@ def lambda_handler(event, context):
 
 
 if __name__ == "__main__":
-    lambda_handler({"good": False, "bad": False, "delete": True}, None)
+    lambda_handler({"case": "delete"}, None)

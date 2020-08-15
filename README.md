@@ -1,14 +1,14 @@
 # dynamodb-client-test
 
-このリポジトリは、AWS の Lambda で DynamoDB のクライアントを扱う際のパフォーマンスを検証するためのコードです。
+このリポジトリは、AWS の Lambda で DynamoDB のクライアントのインスタンス化コストを検証するためのコードです。
 
-より具体的には、「Lambda から DynamoDB に`put_item()`で 1 レコードを登録するための平均処理時間の確認」のためのコードです。
+Lambda から DynamoDB に`put_item()`で 1 レコードを登録するための平均処理時間について、２つのケースで検証しています。
 
 ## 検証ケース
 
 以下の２つのケースについて検証します。
 
-- good pattern: DynamoDB 用クライアントを初期化処理で準備する
+- good pattern: DynamoDB 用クライアントを初期化処理でインスタンス化する
 - bad pattern: DynamoDB 用クライアントを`put_item()`の直前で用意する
 
 good pattarn は AWS 公式ドキュメントによるベストプラクティスです。
