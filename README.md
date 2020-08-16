@@ -10,14 +10,14 @@ DynamoDB や S3 などのクライアントオブジェクトは Lambda の初�
 
 # 検証概要
 
-この記事では DynamoDB クライアントを対象に、インスタンス化のコスト検証と、実際にありそうな good と bad のケースを用意してパフォーマンス検証を実施しました。尚、検証のためにそれぞれの処理を 100 回繰り返して時間を計測し、その平均値を算出しました。
+この記事では DynamoDB クライアントを対象に、インスタンス化コストの検証と、実際にありそうな good と bad のケースを用意して検証を実施しました。尚、検証のためにそれぞれの処理を 100 回繰り返して時間を計測し、その平均値を算出しました。
 
-### インスタンス化のコスト検証のケース
+### インスタンス化コストの検証ケース
 
 1. DynamoDB 用クライアントのインスタンス化
 1. DynamoDB の Table オブジェクトのインスタンス化
 
-### Good パターン, Bad パターンのパフォーマンス検証
+### Good パターン, Bad パターンの検証
 
 1. Good: 初期化処理でインスタンス化した Table オブジェクトを使用して`put_item()`
 1. Bad: 毎回 DynamoDB 用クライアントをインスタンス化して`put_item()`
@@ -197,7 +197,7 @@ def bad_pattern():
 
 検証用コードのリポジトリはこちらです。→ [dynamodb-client-test](https://github.com/michiharu/dynamodb-client-test/settings)
 
-```python
+```lambda_function.py
 from typing import Any, Dict
 import time
 from dataclasses import dataclass, asdict
