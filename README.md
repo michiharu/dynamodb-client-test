@@ -154,11 +154,13 @@ def good_pattern():
 
 へ〜
 
-### Bad パターン
+# Bad パターン
 
 毎回 DynamoDB 用クライアントをインスタンス化して`put_item()`
 
 ### 結果 257 ミリ秒(平均値)
+
+###  コード
 
 ```python
 import boto3
