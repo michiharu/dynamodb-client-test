@@ -39,35 +39,49 @@ def delete_items():
 
 
 def show_cost1():
+    # 計測開始
     start = time.time()
     for i in range(times):
         boto3.resource("dynamodb")
+
+    # 計測終了
     return (time.time() - start) / times
 
 
 def show_cost2():
+    # 計測開始
     start = time.time()
     for i in range(times):
-        resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
-        resource.Table(TEST_TABLE)
+        boto3.resource("dynamodb").Table(TEST_TABLE)
+
+    # 計測終了
     return (time.time() - start) / times
 
 
 def good_pattern():
+    # データ準備
+    items = [Item(str(uuid4()), i) for i in range(times)]
+
+    # 計測開始
     start = time.time()
-    for i in range(times):
-        item = Item(str(uuid4()), i)
+    for item in items:
         table.put_item(Item=item.to_dict())
+
+    # 計測終了
     return (time.time() - start) / times
 
 
 def bad_pattern():
+    # データ準備
+    items = [Item(str(uuid4()), i) for i in range(times)]
+
+    # 計測開始
     start = time.time()
-    for i in range(times):
-        item = Item(str(uuid4()), i)
-        resource: dynamodb.DynamoDBServiceResource = boto3.resource("dynamodb")
-        table = resource.Table(TEST_TABLE)
+    for item in items:
+        table = boto3.resource("dynamodb").Table(TEST_TABLE)
         table.put_item(Item=item.to_dict())
+
+    # 計測終了
     return (time.time() - start) / times
 
 
